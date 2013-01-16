@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 
-URL='http://www.cnbeta.com'
-
-from bs4 import BeautifulSoup
+import lxml.html
 import urllib2
+import lxml.etree
 
-webpage = urllib2.urlopen(URL)
-soup = BeautifulSoup(webpage, fromEncoding="GBK")
+url='http://www.cnbeta.com'
 
-print webpage.info()
-for link in soup.find_all('a'):
-    print link.get('href')
-    print link.contents
+dom = lxml.html.fromstring(urllib2.urlopen(url).read())
+tre = dom.xpath('//dt[@class="topic"]/a')
+res = len(tre)
+
+for index in range(res):
+	print index + 1, url + tre[index].get('href'), tre[index].getchildren()[0].text
 
