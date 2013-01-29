@@ -3,11 +3,13 @@
 import smtplib
 from email.mime.text import MIMEText
 
-mail_list=['majordomo@vger.kernel.org']
-mail_host='smtp.exmail.qq.com'
+mail_list=['', '']
+mail_host=''
 mail_user=''
 mail_pass=''
 mail_prefix=''
+mail_subject=''
+mail_body=''
 
 def send_mail(send_to, subject, body):
     me = mail_user + '<' + mail_user + '@' + mail_prefix + '>'
@@ -28,7 +30,7 @@ def send_mail(send_to, subject, body):
         return False
 
 if __name__ == '__main__':
-    if send_mail(mail_list, '', 'subscribe linux-kernel'):
+    if send_mail(mail_list, mail_subject, mail_body):
         print 'OK!'
     else:
         print 'Failed!'
