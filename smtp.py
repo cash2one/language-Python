@@ -3,7 +3,7 @@
 import smtplib
 from email.mime.text import MIMEText
 
-mail_list=['', '']
+mail_list=['']
 mail_host=''
 mail_user=''
 mail_pass=''
