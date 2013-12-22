@@ -14,8 +14,8 @@ MAX = 230
 
 def send_mail(send_to, subject, body):
     mail_host = 'smtp.163.com'
-    mail_user = 'tozp'
-    mail_pass = 'hui007TzH*..'
+    mail_user = ''
+    mail_pass = ''
     mail_prefix = '163.com'
     mail_subject = ''
     mail_body = ''
