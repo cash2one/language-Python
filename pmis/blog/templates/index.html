@@ -1,0 +1,13 @@
+{% if latest %}
+<p>Latest posts list:</p>
+<ul>
+	{% for post in latest %}
+	<ol>
+		<span>{{ post.pubdate }}</span>
+		<a href="{% url 'blog:detail' post.id %}">{{ post.title }}</a>
+	</ol>
+	{% endfor %}
+</ul>
+{% else %}
+	<p>No posts published.</p>
+{% endif %}
