@@ -7,7 +7,7 @@ import json
 import time
 import sqlite3
 
-report_to = 'tangzhihui@msn.com'
+report_to = '****@msn.com'
 dollar = 6.07179288
 MIN = 190
 MAX = 230
