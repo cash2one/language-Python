@@ -17,31 +17,43 @@ class DealerSpider(BaseSpider):
 		sys.setdefaultencoding('utf-8')
 		sel = Selector(response)
 		part = sel.xpath("//div[@class='dealer-cont  js-dealer']")
-		conn = SimpleMysql(host="127.0.0.1", charset='utf8', db='scrapy_demo', user='root', passwd='')
+		conn = SimpleMysql(host="127.0.0.1", charset='utf8', db='wholenetwork', user='root', passwd='')
 		for item in part:
-			conn.query('''CREATE TABLE IF NOT EXISTS `CHINA` ( `ID` int unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY, `dealer` varchar(255) NOT NULL,
-				`brand` varchar(255), `phone` varchar(255), `saleto` varchar(255), `address` varchar(255));''')
-			dealer1 = brand1 = phone1 = address1 = ''
-			dealer = item.xpath("div/h3/a/text()").extract()
-			if len(dealer) > 1: dealer1 = dealer[-1]
-			elif len(dealer) < 1: dealer1 = ''
-			else: dealer1 = dealer[0]
+			conn.query('''CREATE TABLE IF NOT EXISTS `dealers` ( `ID` int unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY, `dealer` varchar(255) NOT NULL,
+				`brand` varchar(255), `phone` varchar(255), `saleto` varchar(255), `address` varchar(255), `did` varchar(255), `dcity` varchar(255), `dname` varchar(255));''')
+			dealer = brand = phone = address = did = dcity = dname = ''
+			tmp = item.xpath("div/h3/a/text()").extract()
+			if len(tmp) > 1: dealer = tmp[-1]
+			elif len(tmp) < 1: dealer = ''
+			else: dealer = tmp[0]
 
-			brand = item.xpath("div/dl/dd/div[1]/@title").extract()
-			if len(brand) < 1: brand1 = ''
-			else: brand1 = brand[0]
+			tmp = item.xpath("div/dl/dd/div[1]/@title").extract()
+			if len(tmp) < 1: brand = ''
+			else: brand = tmp[0]
 
-			phone = item.xpath("div/dl/dd/div[2]/span[@class='dealer-api']/span[@class='dealer-api-phone']/text()").extract()
-			if len(phone) < 1: phone1 = ''
-			else: phone1 = phone[0]
+			tmp = item.xpath("div/dl/dd/div[2]/span[@class='dealer-api']/span[@class='dealer-api-phone']/text()").extract()
+			if len(tmp) < 1: phone = ''
+			else: phone = tmp[0]
 
-			saleto = sel.xpath("//i[@class='icon icon-salebp']/@title").extract()
-			if len(saleto) < 1: saleto = ''
-			else: saleto1 = saleto[0]
+			tmp = sel.xpath("//i[@class='icon icon-salebp']/@title").extract()
+			if len(tmp) < 1: tmp = ''
+			else: saleto = tmp[0]
 
-			address = item.xpath("div/dl/dd/div[3]/@title").extract()
-			if len(address) < 1: address1 = ''
-			else: address1 = address[0]
+			tmp = item.xpath("div/dl/dd/div[3]/@title").extract()
+			if len(tmp) < 1: address = ''
+			else: address = tmp[0]
 
-			print dealer1
-			conn.insert("CHINA", {'dealer': dealer1, 'brand':brand1, 'phone':phone1, 'saleto':saleto1, 'address':address1})
+			tmp = item.xpath("//h3[@class='dealer-cont-title']/a[1]/@js-did").extract()
+			if len(tmp) < 1: did = ''
+			else: did = tmp[0]
+
+			tmp = item.xpath("//h3[@class='dealer-cont-title']/a[1]/@js-darea").extract()
+			if len(tmp) < 1: dcity = ''
+			else: dcity = tmp[0]
+
+			tmp = item.xpath("//h3[@class='dealer-cont-title']/a[1]/@js-dname").extract()
+			if len(tmp) < 1: dname = ''
+			else: dname = tmp[0]
+
+			print did, dname, dcity, dealer
+			conn.insert("dealers", {'dealer': dealer, 'brand':brand, 'phone':phone, 'saleto':saleto, 'address':address, 'did':did, 'dname':dname, 'dcity':dcity})
