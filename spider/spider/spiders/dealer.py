@@ -4,56 +4,47 @@ from scrapy.selector import Selector
 import sys
 from simplemysql import SimpleMysql
 
+# I don't know the reason why the data cannot be written into db,
+# so all the data crawled was generated into a sql script file.
+
+SCRIPT_FILE = 'chinadealers.sql'
+
 class DealerSpider(BaseSpider):
 	name = 'dealer'
 	allowed_domains = ['http://dealer.autohome.com.cn/china/']
 	urls = []
-	for i in range(1648):
+	for i in range(1696):
 		urls.append('http://dealer.autohome.com.cn/china/0_0_0_0_' + str(i) + '.html')
 	start_urls = urls
+
+	script = open(SCRIPT_FILE, 'w')
+	script.write('DROP TABLE IF EXISTS mapdealer;\n')
+	script.write("CREATE TABLE IF NOT EXISTS `mapdealer` (`Id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,`dealerid` int(11) DEFAULT NULL COMMENT '经销商编号',`dealername` varchar(255) DEFAULT NULL COMMENT '经销商名称',`dealerbrand` varchar(255) DEFAULT NULL COMMENT '经销商品牌',`dealerfullname` varchar(255) DEFAULT NULL COMMENT '经销商公司全名',`dealercity` varchar(255) DEFAULT NULL COMMENT '经销商城市',`remoteid` int(11) DEFAULT NULL COMMENT '服务器经销商编号',`remotename` varchar(255) DEFAULT NULL COMMENT '服务器经销商名称');\n")
+	script.close()
 
 	def parse(self, response):
 		reload(sys)
 		sys.setdefaultencoding('utf-8')
+
 		sel = Selector(response)
-		part = sel.xpath("//div[@class='dealer-cont  js-dealer']")
-		conn = SimpleMysql(host="127.0.0.1", charset='utf8', db='wholenetwork', user='root', passwd='')
+		part = sel.xpath('//div[@class="dealer-cont  js-dealer"]')
+		#conn = SimpleMysql(host="127.0.0.1", db='locoyspider', user='root', passwd='123456')
+		#conn.query("CREATE TABLE IF NOT EXISTS `mapdealer` (`Id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,`dealerid` int(11) DEFAULT NULL COMMENT '经销商编号',`dealername` varchar(255) DEFAULT NULL COMMENT '经销商名称',`dealerfullname` varchar(255) DEFAULT NULL COMMENT '经销商公司全名',`dealercity` varchar(255) DEFAULT NULL COMMENT '经销商城市',`remoteid` int(11) DEFAULT NULL COMMENT '服务器经销商编号',`remotename` varchar(255) DEFAULT NULL COMMENT '服务器经销商名称');")
+
+		script = open(SCRIPT_FILE, 'a')
 		for item in part:
-			conn.query('''CREATE TABLE IF NOT EXISTS `dealers` ( `ID` int unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY, `dealer` varchar(255) NOT NULL,
-				`brand` varchar(255), `phone` varchar(255), `saleto` varchar(255), `address` varchar(255), `did` varchar(255), `dcity` varchar(255), `dname` varchar(255));''')
-			dealer = brand = phone = address = did = dcity = dname = ''
-			tmp = item.xpath("div/h3/a/text()").extract()
-			if len(tmp) > 1: dealer = tmp[-1]
-			elif len(tmp) < 1: dealer = ''
-			else: dealer = tmp[0]
+			dealerid = dealername = dealerfullname = dealercity = dealerbrand = ''
 
-			tmp = item.xpath("div/dl/dd/div[1]/@title").extract()
-			if len(tmp) < 1: brand = ''
-			else: brand = tmp[0]
+			tmp = item.xpath('div/h3/a')
+			if len(tmp) > 1: tmp = tmp[-1]
+			dealerid = tmp.xpath('@js-did').extract()[0]
+			dealername = tmp.xpath('@js-dname').extract()[0]
+			dealerfullname = tmp.xpath('text()').extract()[0]
+			dealercity = tmp.xpath('@js-darea').extract()[0]
+			dealerbrand = item.xpath('div/dl/dd/div[1]/@title').extract()[0]
 
-			tmp = item.xpath("div/dl/dd/div[2]/span[@class='dealer-api']/span[@class='dealer-api-phone']/text()").extract()
-			if len(tmp) < 1: phone = ''
-			else: phone = tmp[0]
+			print '==>', dealerid, dealername, dealerfullname, dealercity, dealerbrand
+			script.write('INSERT INTO mapdealer(dealerid, dealername, dealerfullname, dealercity, dealerbrand) VALUES ('+dealerid+', \''+dealername+'\', \''+dealerfullname+'\', \''+dealercity+'\', \''+dealerbrand+'\');\n')
+			#print conn.insert("mapdealer", { 'dealerid': dealerid, 'dealername':dealername, 'dealerfullname':dealerfullname, 'dealercity':dealercity })
 
-			tmp = sel.xpath("//i[@class='icon icon-salebp']/@title").extract()
-			if len(tmp) < 1: tmp = ''
-			else: saleto = tmp[0]
-
-			tmp = item.xpath("div/dl/dd/div[3]/@title").extract()
-			if len(tmp) < 1: address = ''
-			else: address = tmp[0]
-
-			tmp = item.xpath("//h3[@class='dealer-cont-title']/a[1]/@js-did").extract()
-			if len(tmp) < 1: did = ''
-			else: did = tmp[0]
-
-			tmp = item.xpath("//h3[@class='dealer-cont-title']/a[1]/@js-darea").extract()
-			if len(tmp) < 1: dcity = ''
-			else: dcity = tmp[0]
-
-			tmp = item.xpath("//h3[@class='dealer-cont-title']/a[1]/@js-dname").extract()
-			if len(tmp) < 1: dname = ''
-			else: dname = tmp[0]
-
-			print did, dname, dcity, dealer
-			conn.insert("dealers", {'dealer': dealer, 'brand':brand, 'phone':phone, 'saleto':saleto, 'address':address, 'did':did, 'dname':dname, 'dcity':dcity})
+		script.close()
