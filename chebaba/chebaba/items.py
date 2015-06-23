@@ -20,3 +20,5 @@ class AutohomePriceItem(scrapy.Item):
 class AutohomeArticleItem(scrapy.Item):
     title = scrapy.Field()
     content = scrapy.Field()
+    series_name = scrapy.Field()
+    brand_id = scrapy.Field()
