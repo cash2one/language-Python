@@ -5,7 +5,7 @@ import urllib, urllib2, json, sys
 from simplemysql import SimpleMysql
 
 STEP = 100
-AUTOHOMEPRICE_API = ''
+AUTOHOMEPRICE_API = 'http://localhost/api/price'
 TABLE = 'autohome_price'
 MYSQL_HOST = '127.0.0.1'
 MYSQL_DB = 'wholenetwork'

@@ -17,8 +17,39 @@ class AutohomePriceItem(scrapy.Item):
     oprice = scrapy.Field()
     price = scrapy.Field()
 
-class AutohomeArticleItem(scrapy.Item):
+class AutohomeAllPriceItem(scrapy.Item):
+    city = scrapy.Field()
+    dealer = scrapy.Field()
+    dealerid = scrapy.Field()
+    brand = scrapy.Field()
+    brandid = scrapy.Field()
+    model = scrapy.Field()
+    modelid = scrapy.Field()
+    oprice = scrapy.Field()
+    price = scrapy.Field()
+
+class AutohomePromotionItem(scrapy.Item):
     title = scrapy.Field()
     content = scrapy.Field()
+    prices = scrapy.Field()
     series_name = scrapy.Field()
+    series_id = scrapy.Field()
+    dealer = scrapy.Field()
+    dealerid = scrapy.Field()
+    datefrom = scrapy.Field()
+    dateto = scrapy.Field()
+
+class AutohomeAllPromotionItem(scrapy.Item):
+    city = scrapy.Field()
+    brand = scrapy.Field()
+    pageurl = scrapy.Field()
+    title = scrapy.Field()
+    content = scrapy.Field()
+    prices = scrapy.Field()
+    series_name = scrapy.Field()
+    series_id = scrapy.Field()
     brand_id = scrapy.Field()
+    dealer = scrapy.Field()
+    dealerid = scrapy.Field()
+    datefrom = scrapy.Field()
+    dateto = scrapy.Field()
