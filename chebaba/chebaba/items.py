@@ -27,6 +27,7 @@ class AutohomeAllPriceItem(scrapy.Item):
     modelid = scrapy.Field()
     oprice = scrapy.Field()
     price = scrapy.Field()
+    manu = scrapy.Field()
 
 class AutohomePromotionItem(scrapy.Item):
     title = scrapy.Field()

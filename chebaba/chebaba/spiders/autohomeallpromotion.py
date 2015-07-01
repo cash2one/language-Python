@@ -8,23 +8,24 @@ from scrapy.spider import BaseSpider
 from scrapy.selector import Selector
 from scrapy.http import Request
 from chebaba.items import AutohomeAllPromotionItem
-import urllib, urllib2
-from simplemysql import SimpleMysql
+import urllib, urllib2#, json
+#from simplemysql import SimpleMysql
 from HTMLParser import HTMLParser
 
-db = SimpleMysql(host = '127.0.0.1', db = 'wholenetwork', user = 'root', passwd = 'root')
-PAGE_COUNT = 30
+#db = SimpleMysql(host = '127.0.0.1', db = 'wholenetwork', user = 'root', passwd = 'root')
+PAGE_COUNT = 10
+API_ADDRESS = 'http://localhost/api/promotion'
 
-def doPost(url, data):
-    if not data: return
-    request = urllib2.Request(url, urllib.urlencode(data))
+def doPost(url, item):
+    if not item: return
+    request = urllib2.Request(url, urllib.urlencode(item))
     response = urllib2.urlopen(request).read()
-    return response
-
+    #return json.loads(response)
+'''
 def doSave(item):
     item['prices'] = str(item['prices']).replace("u'", "'")
     return db.insert('autohome_allpromotion', item)
-
+'''
 def filt(string, start, end):
     if not string: return
     i = string.find(start) + len(start)
@@ -32,7 +33,7 @@ def filt(string, start, end):
     return string[i : i + j]
 
 def stripTags(html):
-    html = html.strip().strip('\r').strip('\n')
+    html = html.strip().strip('\r').strip('\n').strip(u' ')
     result = []
     parser = HTMLParser()
     parser.handle_data = result.append
@@ -125,4 +126,7 @@ class AutohomeAllPromotionSpider(BaseSpider):
         item['brand_id'] = 2
         item['dealer'] = sel.xpath('//div[@class="text-main"]/text()').extract()[0]
         item['dealerid'] = sel.xpath('//li[@id="nav_0"]/a/@href').extract()[0].replace('/', '')
-        if doSave(item): print '\t', 'city:', item['city'], 'dealer:', item['dealer'], item['series_name'], item['title']
+        #tmp = doPost(API_ADDRESS, item)
+        doPost(API_ADDRESS, item)
+        #if doSave(item):
+        #print '\t', 'city:', item['city'], 'dealer:', item['dealer'], item['series_name'], item['title'], tmp['error'], tmp['msg']
