@@ -1,0 +1,25 @@
+$def with (content)
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>$content.title</title>
+	<link rel="shortcut icon" href="/static/favicon.ico" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	$#if content.cssfiles:
+		$#for f in content.cssfiles.split():
+			<!--
+			<link rel="stylesheet" href="$#f" type="text/css" media="screen" charset="utf-8"/>
+			-->
+	<script src="/static/js/mui.min.js"></script>
+	<link href="/static/css/mui.min.css" rel="stylesheet" type="text/css" />
+	<link href="/static/css/main.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+	<div class="mui-container">
+	$:content
+	</div>
+</body>
+</html>

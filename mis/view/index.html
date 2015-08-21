@@ -1,0 +1,8 @@
+$var title: Home
+
+$if session.get('username') is not None:
+	<p>Welcome! $session.username</p>
+	<a class="mui-btn mui-btn-default mui-btn-raised" href="/logout">Logout</a>
+$else:
+	<a class="mui-btn mui-btn-default mui-btn-raised" href="/login">Login</a>
+	<a class="mui-btn mui-btn-default mui-btn-raised" href="/register">Register</a>
