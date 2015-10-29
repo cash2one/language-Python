@@ -54,8 +54,13 @@ COOKIES_ENABLES=False
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
 	'scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware' : None,
-	'chebaba.spiders.rotate_useragent.RotateUserAgentMiddleware' : 400
+	'chebaba.spiders.rotate_useragent.RotateUserAgentMiddleware' : 400,
+#	'scrapy_crawlera.CrawleraMiddleware':600,
 }
+
+#CRAWLERA_ENABLE = True
+#CRAWLERA_USER = '989fff6222cf493cb8bba02a0a588003'
+#CRAWLERA_PASS = 'oda40570'
 
 # Enable or disable extensions
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html

@@ -48,5 +48,4 @@ class RotateUserAgentMiddleware(UserAgentMiddleware):
         self.user_agent = user_agent
 
     def process_request(self, request, spider):
-        ua = random.choice(self.user_agent_list)
-        print 'USER AGENT: [', ua, ']'
+        random.choice(self.user_agent_list)

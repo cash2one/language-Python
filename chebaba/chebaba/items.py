@@ -7,17 +7,21 @@
 
 import scrapy
 
-class AutohomePriceItem(scrapy.Item):
+class AutohomeAllPriceItem(scrapy.Item):
+    city = scrapy.Field()
     dealer = scrapy.Field()
     dealerid = scrapy.Field()
     brand = scrapy.Field()
     brandid = scrapy.Field()
     model = scrapy.Field()
     modelid = scrapy.Field()
+    pubdate = scrapy.Field()
     oprice = scrapy.Field()
     price = scrapy.Field()
+    manu = scrapy.Field()
+    cartype = scrapy.Field()
 
-class AutohomeAllPriceItem(scrapy.Item):
+class BitautoAllPriceItem(scrapy.Item):
     city = scrapy.Field()
     dealer = scrapy.Field()
     dealerid = scrapy.Field()
@@ -27,18 +31,7 @@ class AutohomeAllPriceItem(scrapy.Item):
     modelid = scrapy.Field()
     oprice = scrapy.Field()
     price = scrapy.Field()
-    manu = scrapy.Field()
-
-class AutohomePromotionItem(scrapy.Item):
-    title = scrapy.Field()
-    content = scrapy.Field()
-    prices = scrapy.Field()
-    series_name = scrapy.Field()
-    series_id = scrapy.Field()
-    dealer = scrapy.Field()
-    dealerid = scrapy.Field()
-    datefrom = scrapy.Field()
-    dateto = scrapy.Field()
+    off = scrapy.Field()
 
 class AutohomeAllPromotionItem(scrapy.Item):
     city = scrapy.Field()
@@ -54,3 +47,14 @@ class AutohomeAllPromotionItem(scrapy.Item):
     dealerid = scrapy.Field()
     datefrom = scrapy.Field()
     dateto = scrapy.Field()
+
+class AutohomeAllPromotionTitleItem(scrapy.Item):
+    city = scrapy.Field()
+    dealer = scrapy.Field()
+    dealerid = scrapy.Field()
+    manu = scrapy.Field()
+    brand = scrapy.Field()
+    title = scrapy.Field()
+    titleid = scrapy.Field()
+    pubdate = scrapy.Field()
+    pageurl = scrapy.Field()
