@@ -53,7 +53,7 @@ COOKIES_ENABLES=False
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-	'scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware' : None,
+	'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware' : None,
 	'chebaba.spiders.rotate_useragent.RotateUserAgentMiddleware' : 400,
 #	'scrapy_crawlera.CrawleraMiddleware':600,
 }
@@ -71,7 +71,7 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 #ITEM_PIPELINES = {
-#    'chebaba.pipelines.AutohomePricePipeline': 300,
+#    'chebaba.pipelines.AutohomePipeline': 300,
 #}
 
 # Enable and configure the AutoThrottle extension (disabled by default)

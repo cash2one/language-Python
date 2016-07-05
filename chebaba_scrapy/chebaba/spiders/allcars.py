@@ -2,7 +2,7 @@
 #!/usr/bin/env python
 
 import sys
-from scrapy.spider import BaseSpider
+from scrapy.spiders import BaseSpider
 from scrapy.selector import Selector
 from scrapy.http import Request
 from simplemysql import SimpleMysql

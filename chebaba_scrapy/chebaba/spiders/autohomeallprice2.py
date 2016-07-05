@@ -6,10 +6,13 @@ from scrapy.spider import BaseSpider
 from scrapy.selector import Selector
 from scrapy.http import Request
 from chebaba.items import AutohomeAllPriceItem
+from simplemysql import SimpleMysql
+from scrapy import log
 
+ISSAVE = False
 ISPOST = False
 API_ADDRESS = 'http://120.26.67.45/api/price'
-API_ADDRESS = 'http://172.26.130.156:8080/E4S/api/service/offerPrice'
+API_ADDRESS = 'http://e4s.stg.dongfeng-nissan.com.cn:81/api/service/offerPrice'
 
 def filt(string, start, end):
     i = string.find(start) + len(start)
@@ -34,10 +37,10 @@ class AutohomeAllPriceSpider(BaseSpider):
     reload(sys)
     sys.setdefaultencoding('utf-8')
 
-    name = 'autohomeallprice'
+    name = 'autohomeallprice2'
     allowed_domains = ['dealer.autohome.com.cn']
     start_urls = ['http://dealer.autohome.com.cn/china/']
-    if ISPOST: start_urls = ['http://dealer.autohome.com.cn/china//0_63_0_92_1.html']
+    if ISPOST: start_urls = ['http://dealer.autohome.com.cn/china/0_63_0_92_1.html']
 
     def parse(self, response):
         sel = Selector(response)
@@ -45,32 +48,44 @@ class AutohomeAllPriceSpider(BaseSpider):
         for dlr in dlrs:
             url = response.urljoin('price.html').replace('china', filt(dlr, '.cn/', '/'))
             yield Request(url, self.parsePrice)
+
         np = sel.xpath('//a[@class="page-item-next"]/@href').extract()
         if np: yield Request(response.urljoin(np[0]), self.parse)
 
     def parsePrice(self, response):
         sel = Selector(response)
+        trs = sel.xpath('//div[@class="carprice-cont"]/dl[@class="price-dl"]')
         item = AutohomeAllPriceItem()
         item['city'] = sel.xpath('//div[@class="breadnav"]/a[2]/text()').extract()[0]
         item['dealer'] = sel.xpath('//div[@class="text-main"]/text()').extract()[0]
         item['dealerid'] = sel.xpath('//li[@id="nav_0"]/a/@href').extract()[0].replace('/', '')
-        item['manu'] = ','.join(sel.xpath('//div[@class="brandtree-name"]/p[@class="text"]/text()').extract())
-        self.logger.info(item['city'] + ', ' + item['dealer'] + ', ' + item['manu'])
+        tmp = sel.xpath('//div[@class="brandtree-name"]')
+        tmps = ''
+        for t in tmp: tmps += t.xpath('p[@class="text"]/text()').extract()[0] + ','
+        item['manu'] = tmps[:-1]
+        log.msg(item['city'] + ', ' + item['dealer'] + ', ' + item['manu'])
 
-        trs = sel.xpath('//div[@class="carprice-cont"]/dl[@class="price-dl"]')
+        db = SimpleMysql(host = '127.0.0.1:5029', db = 'wholenetwork', user = 'root', passwd = '')
         for tr in trs:
-            item['brand'] = tr.xpath('dt[@class="fn-clear"]/div[@class="name"]/p[@class="name-text font-yh"]/a/text()').extract()[0]
-            item['brandid'] = filt(tr.xpath('dt[@class="fn-clear"]/div[@class="name"]/p[@class="name-text font-yh"]/a/@href').extract()[0], 'cn/', '/')
+            item['brand'] = tr.xpath('dt[@class="fn-clear"]/div[@class="name"]/p/a/text()').extract()[0]
+            item['brandid'] = filt(tr.xpath('dt[@class="fn-clear"]/div[@class="name"]/p/a/@href').extract()[0], 'cn/', '/')
+
             prices = tr.xpath('dd/table/tr')
             for price in prices:
-                if price.xpath('th/text()'): continue
-                item['model'] = price.xpath('td[1]/a/text()').extract()[0]
+                tmp = price.xpath('td[2]/p/text()').extract()
+                if not tmp: continue  # filt th row
+                else: item['oprice'] = tmp[0]
+                item['oprice'] = item['oprice'].replace(u'万','')
+                tmp = price.xpath('td[3]/div[@class="this-number red"]/a[1]/text()').extract()
+                if not tmp: tmp = price.xpath('td[3]/p/a/text()').extract()
+                item['price'] = tmp[0].replace(u'万','').replace(u' ','')
+                item['pubdate'] = price.xpath('td[5]/text()').extract()[0].replace(u' ','').replace('\r\n','')
+                tmp = price.xpath('td[1]/a/text()').extract()[0]
+                item['model'] = tmp[:tmp.find('<')]
                 item['modelid'] = filt(price.xpath('td[1]/a/@href').extract()[0], 'spec_', '.')
-                item['oprice'] = price.xpath('td[2]/p/text()').extract()[0].replace(u'万','')
-                if price.xpath('td[3]/div[@class="this-number red"]/a/text()'): item['price'] = price.xpath('td[3]/div[@class="this-number red"]/a/text()').extract()[0].replace(u'万','')
-                else: item['price'] = price.xpath('td[3]/p/text()').extract()[0].replace(u'万','')
-                # item['pubdate'] = price.xpath('td[5]/text()').extract()[0].replace(u' ','').replace('\r\n','')
+
+                if ISSAVE: db.insert('autohome_allprice', item)
 
                 if ISPOST:
                     tmb = doPost(API_ADDRESS, item)
-                    self.logger.info(json.dumps(dict(item), ensure_ascii=False))
+                    log.msg('\t' + str(tmb['error']) + ', ' + tmb['msg'])

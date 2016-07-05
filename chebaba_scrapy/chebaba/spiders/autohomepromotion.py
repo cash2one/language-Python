@@ -10,21 +10,15 @@ from scrapy.selector import Selector
 from scrapy.http import Request
 from chebaba.items import AutohomeAllPromotionItem
 import urllib, urllib2, json
-from simplemysql import SimpleMysql
 from HTMLParser import HTMLParser
 
-ISSAVE = False
-ISPOST = False
-PAGE_COUNT = 10
+ISPOST = True
+PAGE_COUNT = 5
 
-db = None
-if ISSAVE: db = SimpleMysql(host = '127.0.0.1:5029', db = 'wholenetwork', user = 'root', passwd = '')
-
-API_ADDRESS = 'http://120.26.216.180/api/promotion'
-API_ADDRESS = 'http://120.26.67.45/api/promotion'
-API_ADDRESS = 'http://localhost:8080/e4s/api/service/activityPublish.do?actionType=list'
-API_ADDRESS = 'http://e4s.stg.dongfeng-nissan.com.cn:81/api/service/activityPublish'
-
+API_ADDRESS = 'http://172.26.137.123:8082/api/service/activityPublish'
+API_ADDRESS = 'http://e4s.stg.dongfeng-nissan.com.cn/e4s-mp-data/api/service/activityPublish'
+#API_ADDRESS = 'http://localhost:8080/e4s-mp/api/service/activityPublish'
+#API_ADDRESS = 'http://e4s.stg.dongfeng-nissan.com.cn/e4scfm/api/service/activityPublish'
 def doPost(url, item):
     if not item: return
     request = urllib2.Request(url, urllib.urlencode(item))
@@ -57,7 +51,7 @@ class AutohomeAllPromotionSpider(BaseSpider):
 
     name = 'autohomepromotion'
     allowed_domains = ['dealer.autohome.com.cn']
-    start_urls = ['http://dealer.autohome.com.cn/china/0_63_0_92_1.html', 'http://dealer.autohome.com.cn/china/0_122_0_92_1.html']
+    start_urls = ['http://dealer.autohome.com.cn/china/0_63_0_92_1.html', 'http://dealer.autohome.com.cn/china/0_122_0_0_1.html']
 
     def parse(self, response):
         sel = Selector(response)
@@ -76,15 +70,14 @@ class AutohomeAllPromotionSpider(BaseSpider):
             url = response.urljoin(promotion.xpath('a/@href').extract()[0])
             yield Request(url, self.parsePromotion)
 
-        '''np = sel.xpath('//a[@class="page-next "]/@href').extract()
-        pn = sel.xpath('//div[@class="page dealer-page"]/a[@class="current"]/text()').extract()
-        if np and pn:
-            if int(pn[0]) <= PAGE_COUNT:
-                yield Request(response.urljoin(np[0]), self.parsePromotionList)'''
+        #np = sel.xpath('//a[@class="page-next "]/@href').extract()
+        #pn = sel.xpath('//div[@class="page dealer-page"]/a[@class="current"]/text()').extract()
+        #if np and pn:
+        #    if int(pn[0]) <= PAGE_COUNT:
+        #        yield Request(response.urljoin(np[0]), self.parsePromotionList)
 
     def parsePromotion(self, response):
-        self.logger.info(response.url)
-
+        self.logger.info('Crawling: ' + response.url)
         sel = Selector(response)
         item = AutohomeAllPromotionItem()
 
@@ -142,8 +135,7 @@ class AutohomeAllPromotionSpider(BaseSpider):
         item['dealer'] = sel.xpath('//div[@class="text-main"]/text()').extract()[0]
         item['dealerid'] = sel.xpath('//li[@id="nav_0"]/a/@href').extract()[0].replace('/', '')
 
-        if ISSAVE:
-            doSave(item)
+        print json.dumps(item, ensure_ascii=False)
 
         if ISPOST:
             doPost(API_ADDRESS, item)
