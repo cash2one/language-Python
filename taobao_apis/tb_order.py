@@ -15,16 +15,16 @@ def post(data):
 	d['type'] = data['type']
 	d['payment'] = round(float(data['payment']), 2)
 	d['order_info'] = json.dumps(data, ensure_ascii=False)
-	request = urllib2.Request('http://api.chebaba.com/TbOrder.do?action=Add', urllib.urlencode(d))
+	request = urllib2.Request('', urllib.urlencode(d))
 	return urllib2.urlopen(request).read()
 
 if __name__ == '__main__':
 	reload(sys)
 	sys.setdefaultencoding('utf-8')
 
-	appkey = '23042241'
-	appsecret = '9949111fbfc91f1ad8587c24e81ac26f'
-	sessionkey = '6102509a0c354d6b71aa7f0ce739f31499dac85d5f229ef2258287667'
+	appkey = ''
+	appsecret = ''
+	sessionkey = ''
 
 	logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(filename)s:%(lineno)d %(levelname)s: %(message)s', filename='tb_order.py.log', filemode='a')
 	console = logging.StreamHandler()

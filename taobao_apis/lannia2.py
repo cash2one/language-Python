@@ -8,9 +8,9 @@ if __name__ == '__main__':
 	reload(sys)
 	sys.setdefaultencoding('utf-8')
 
-	appkey = '23042241'
-	appsecret = '9949111fbfc91f1ad8587c24e81ac26f'
-	sessionkey = '6102509a0c354d6b71aa7f0ce739f31499dac85d5f229ef2258287667'
+	appkey = ''
+	appsecret = ''
+	sessionkey = ''
 
 	logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(filename)s:%(lineno)d %(levelname)s: %(message)s', filename='lannia2.py.csv', filemode='a')
 	console = logging.StreamHandler()

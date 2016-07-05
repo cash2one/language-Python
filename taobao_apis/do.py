@@ -4,8 +4,8 @@
 import top.api
 import sys, time, logging
 
-top.setDefaultAppInfo('23042241', 'c879c598abce8f412a77b03ffb046e83')
-SESSION_CODE = '61014101196335f5551cf6e8d150c78358b8aedb3d449272258287667'
+top.setDefaultAppInfo('', '')
+SESSION_CODE = ''
 
 if __name__ == '__main__':
 	reload(sys)

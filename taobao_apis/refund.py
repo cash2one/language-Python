@@ -10,8 +10,8 @@
 #import top.api
 import sys, time, logging, json
 
-top.setDefaultAppInfo('23042241', 'c879c598abce8f412a77b03ffb046e83')
-SESSION_CODE = '6101b188b6d254f60ba3edb43a1dfeac4cc58c261c22c442691740505'
+top.setDefaultAppInfo('', '')
+SESSION_CODE = ''
 TAOBAO_API_SERVER_ADDR = 'gw.api.taobao.com'
 TAOBAO_API_SERVER_PORT = 80
 
