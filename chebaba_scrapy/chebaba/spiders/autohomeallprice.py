@@ -8,8 +8,8 @@ from scrapy.http import Request
 from chebaba.items import AutohomeAllPriceItem
 
 ISPOST = False
-API_ADDRESS = 'http://120.26.67.45/api/price'
-API_ADDRESS = 'http://172.26.130.156:8080/E4S/api/service/offerPrice'
+API_ADDRESS = ''
+API_ADDRESS = ''
 
 def filt(string, start, end):
     i = string.find(start) + len(start)

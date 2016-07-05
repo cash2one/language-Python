@@ -17,13 +17,13 @@ R_CHEXINGBAOJIA = True
 R_YOUHUICUXIAO = False#True
 R_ZIXUNXINXI = False#True
 
-postCheXingBaoJia = 'http://mgt.chebaba.com/e4s-mp/api/service/offerPrice'
-postYouHuiCuXiao = 'http://mgt.chebaba.com/e4s-mp/api/service/activityPublish'
-postZiXunXinXi = 'http://mgt.chebaba.com/e4s-mp/api/service/dealerActivityPublish'
+postCheXingBaoJia = ''
+postYouHuiCuXiao = ''
+postZiXunXinXi = ''
 if DEBUG:
-    postCheXingBaoJia = 'http://e4s.stg.dongfeng-nissan.com.cn/e4s-mp/api/service/offerPrice'
-    postYouHuiCuXiao = 'http://e4s.stg.dongfeng-nissan.com.cn/e4s-mp/api/service/activityPublish'
-    postZiXunXinXi = 'http://e4s.stg.dongfeng-nissan.com.cn/e4s-mp/api/service/dealerActivityPublish'
+    postCheXingBaoJia = ''
+    postYouHuiCuXiao = ''
+    postZiXunXinXi = ''
 
 def re_digital(param):
     if param:

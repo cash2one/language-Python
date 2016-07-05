@@ -15,7 +15,7 @@ def post(api, data):
 
 if __name__ == '__main__':
 	data = {}
-	data['url_long'] = 'http://nissan.ie9.org/'
+	data['url_long'] = ''
 	ret = post('https://api.weibo.com/2/short_url/shorten.json', data)
 	print data['url_long'], '>', ret
 

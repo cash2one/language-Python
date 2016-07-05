@@ -11,14 +11,8 @@ import threading, Queue
 def usage():
     os.system(['clear', 'cls'][os.name == 'nt'])
     print '+' + '-' * 50 + '+'
-    print '\t Python WordPress暴力破解工具多线程版'
-    print '\t   Blog：http://www.waitalone.cn/'
-    print '\t       Code BY： 独自等待'
-    print '\t       Time：2015-04-29'
-    print '+' + '-' * 50 + '+'
     if len(sys.argv) != 4:
         print '用法: ' + os.path.basename(sys.argv[0]) + '  用户名  密码字典  待破解的网站URL地址  '
-        print '实例: ' + os.path.basename(sys.argv[0]) + '  admin  pass.txt http://www.waitalone.cn/ '
         sys.exit()
 
 

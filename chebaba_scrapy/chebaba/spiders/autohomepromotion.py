@@ -15,10 +15,10 @@ from HTMLParser import HTMLParser
 ISPOST = True
 PAGE_COUNT = 5
 
-API_ADDRESS = 'http://172.26.137.123:8082/api/service/activityPublish'
-API_ADDRESS = 'http://e4s.stg.dongfeng-nissan.com.cn/e4s-mp-data/api/service/activityPublish'
-#API_ADDRESS = 'http://localhost:8080/e4s-mp/api/service/activityPublish'
-#API_ADDRESS = 'http://e4s.stg.dongfeng-nissan.com.cn/e4scfm/api/service/activityPublish'
+API_ADDRESS = ''
+API_ADDRESS = ''
+#API_ADDRESS = ''
+#API_ADDRESS = ''
 def doPost(url, item):
     if not item: return
     request = urllib2.Request(url, urllib.urlencode(item))

@@ -14,7 +14,7 @@ def download(url):
 
 if __name__ == '__main__':
 
-    remote_url = 'http://dealer2.autoimg.cn/dealerdfs/g16/M13/BC/7A/620x0_1_q87_autohomedealer__wKjBx1YrMRGABOCRAAw_ZGYFrlQ580.jpg'
+    remote_url = ''
 
     download(remote_url)
 

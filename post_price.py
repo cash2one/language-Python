@@ -10,7 +10,7 @@ def u(s, encoding):
 
 def post(data):
 	f = urllib2.urlopen(
-		'http://erp.pp.cn:88/api/price',
+		'',
 		urllib.urlencode(data)
 	)
 	return f.read()

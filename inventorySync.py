@@ -14,6 +14,6 @@ if __name__ == '__main__':
 	logging.getLogger('').addHandler(console)
 
 	try:
-		logging.info(requests.post(url='http://121.41.173.5/webservice/webservice.php/webservice/tmall/inventorySync', data=None).text)
+		logging.info(requests.post(url='http:///webservice/webservice.php/webservice/tmall/inventorySync', data=None).text)
 	except Exception, e:
 		logging.error(e)

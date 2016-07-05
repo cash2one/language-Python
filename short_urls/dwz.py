@@ -16,7 +16,7 @@ def post(api, data):
 
 if __name__ == '__main__':
 	data = {}
-	data['url'] = 'http://nissan.ie9.org/'
-	data['alias'] = 'nissan_ie9'
+	data['url'] = ''
+	data['alias'] = ''
 	ret = post('http://dwz.cn/create.php', data)
 	print int(ret['status'])==0 and '\033[32m成功\033[0m' or '\033[31m失败\033[0m', ret['err_msg']

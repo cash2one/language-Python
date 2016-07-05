@@ -11,8 +11,8 @@ from scrapy import log
 
 ISSAVE = False
 ISPOST = False
-API_ADDRESS = 'http://120.26.67.45/api/price'
-API_ADDRESS = 'http://e4s.stg.dongfeng-nissan.com.cn:81/api/service/offerPrice'
+API_ADDRESS = ''
+API_ADDRESS = ''
 
 def filt(string, start, end):
     i = string.find(start) + len(start)
