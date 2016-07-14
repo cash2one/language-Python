@@ -6,7 +6,7 @@ from PIL import Image, ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 if __name__ == '__main__':
-	url = 'http://m.htxq.net/servlet/SysVphServlet?action=getVphList&currentPageIndex=0&pageSize=500'
+	url = 'http://..../servlet/SysVphServlet?action=getVphList&currentPageIndex=0&pageSize=500'
 	items = json.loads(requests.get(url).text)['result']
 	for item in items:
 		print 'crawling', item['fnArticleTitle'], '...'
