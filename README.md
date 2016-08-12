@@ -1,3 +1,0 @@
-#read me
-
-Python codes
